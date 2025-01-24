@@ -24,46 +24,46 @@ index2_name = args.index2_name
 field = args.field
 
 # Function to get URL data from an index
-def get_url_data(service_endpoint, index_name, api_key, field):
+def get_data(service_endpoint, index_name, api_key, field):
     client = SearchClient(endpoint=service_endpoint, index_name=index_name, credential=AzureKeyCredential(api_key))
-    urls = []
+    values = []
     batch_size = 1000
     skip = 0
 
     while True:
         results = client.search(search_text="", select=field, top=batch_size, skip=skip)
-        batch_urls = [doc[field] for doc in results]
-        if not batch_urls:
+        batch_values = [doc[field] for doc in results]
+        if not batch_values:
             break
-        urls.extend(batch_urls)
+        values.extend(batch_values)
         skip += batch_size
 
-    return urls
+    return values
 
 # Get data from both indexes
-urls_index1 = get_url_data(service_endpoint, index1_name, api_key, field)
-urls_index2 = get_url_data(service_endpoint, index2_name, api_key, field)
+values_index1 = get_data(service_endpoint, index1_name, api_key, field)
+values_index2 = get_data(service_endpoint, index2_name, api_key, field)
 
 # Count the occurrences of each URL
-count_index1 = Counter(urls_index1)
-count_index2 = Counter(urls_index2)
+count_index1 = Counter(values_index1)
+count_index2 = Counter(values_index2)
 
 # Find URLs only in one index
 only_in_index1 = set(count_index1) - set(count_index2)
 only_in_index2 = set(count_index2) - set(count_index1)
 
 # Find URLs with different numbers of rows
-diff_counts = {url: (count_index1[url], count_index2[url]) for url in set(urls_index1) & set(urls_index2) if count_index1[url] != count_index2[url]}
+diff_counts = {value: (count_index1[value], count_index2[value]) for value in set(values_index1) & set(values_index2) if count_index1[value] != count_index2[value]}
 
 # Print results
-print(f"URLs only in {index1_name}:")
-for url in only_in_index1:
-    print(url)
+print(f"Values only in {index1_name}:")
+for value in only_in_index1:
+    print(value)
 
-print(f"\nURLs only in {index2_name}:")
-for url in only_in_index2:
-    print(url)
+print(f"\nValues only in {index2_name}:")
+for value in only_in_index2:
+    print(value)
 
-print("\nURLs with different numbers of rows:")
-for url, counts in diff_counts.items():
-    print(f"{url}: {index1_name}={counts[0]}, {index2_name}={counts[1]}")
+print("\nValues with different numbers of rows:")
+for value, counts in diff_counts.items():
+    print(f"{value}: {index1_name}={counts[0]}, {index2_name}={counts[1]}")

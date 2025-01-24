@@ -46,9 +46,17 @@ This script compares the counts of unique values for a specific field between tw
 
 1. **Copy and modify the `.env.sample` file**
 
-   ```sh
-   cp .env.sample .env
-   ```
+   - On Windows (Command Prompt or PowerShell):
+
+     ```sh
+     copy .env.sample .env
+     ```
+
+   - On macOS/Linux:
+
+     ```sh
+     cp .env.sample .env
+     ```
 
    Edit the `.env` file to include your Azure Search service endpoint and API key:
 
