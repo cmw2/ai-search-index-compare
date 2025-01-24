@@ -41,8 +41,10 @@ def get_data(service_endpoint, index_name, api_key, field):
     return values
 
 # Get data from both indexes
-values_index1 = get_data(service_endpoint, index1_name, api_key, field)
-values_index2 = get_data(service_endpoint, index2_name, api_key, field)
+# values_index1 = get_data(service_endpoint, index1_name, api_key, field)
+# values_index2 = get_data(service_endpoint, index2_name, api_key, field)
+values_index1 = [value.lower() for value in get_data(service_endpoint, index1_name, api_key, field)]
+values_index2 = [value.lower() for value in get_data(service_endpoint, index2_name, api_key, field)]
 
 # Count the occurrences of each URL
 count_index1 = Counter(values_index1)
